@@ -8,11 +8,9 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY
 );
 
-const openai = new OpenAIApi(
-  new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-  })
-);
+const openai = new OpenAIApi({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
