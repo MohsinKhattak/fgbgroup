@@ -13,15 +13,6 @@ const openai = new OpenAIApi(
 );
 
 export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "https://fgbgroupv4.vercel.app");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-  // Handle preflight OPTIONS request (browser sends this before the actual request)
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
@@ -52,9 +43,7 @@ export default async function handler(req, res) {
       parsedQuery = JSON.parse(aiOutput);
     } catch (err) {
       console.error("Error parsing OpenAI output:", err);
-      return res
-        .status(500)
-        .json({ error: "Failed to interpret the user query." });
+      return res.status(500).json({ error: "Failed to interpret the user query." });
     }
 
     const { producttype, wattage, colortemp } = parsedQuery;
@@ -64,8 +53,7 @@ export default async function handler(req, res) {
     for (const table of tableNames) {
       let queryBuilder = supabase.from(table).select("*");
 
-      if (producttype && producttype !== "all")
-        queryBuilder.eq("producttype", producttype);
+      if (producttype && producttype !== "all") queryBuilder.eq("producttype", producttype);
       if (wattage) queryBuilder.ilike("wattage", `%${wattage}%`);
       if (colortemp) queryBuilder.ilike("colortemp", `%${colortemp}%`);
 
@@ -83,13 +71,9 @@ export default async function handler(req, res) {
 
     return results.length > 0
       ? res.status(200).json({ type: "results", results })
-      : res
-          .status(404)
-          .json({ type: "error", message: "No matching products found." });
+      : res.status(404).json({ type: "error", message: "No matching products found." });
   } catch (error) {
     console.error("Error during search:", error);
-    return res
-      .status(500)
-      .json({ error: "An error occurred while processing your query." });
+    return res.status(500).json({ error: "An error occurred while processing your query." });
   }
 }
