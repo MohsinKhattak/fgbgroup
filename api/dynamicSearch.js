@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { Configuration, OpenAIApi } from "openai";
+import { OpenAIApi } from "openai";
 
 import dotenv from "dotenv";
 import path from "path";
