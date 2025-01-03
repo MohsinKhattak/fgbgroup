@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { OpenAIApi } from "openai";
+import { OpenAI } from "openai";
 
 import dotenv from "dotenv";
 import path from "path";
@@ -8,7 +8,7 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY
 );
 
-const openai = new OpenAIApi({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
